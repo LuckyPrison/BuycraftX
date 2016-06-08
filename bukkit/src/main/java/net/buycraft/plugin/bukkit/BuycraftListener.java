@@ -1,14 +1,15 @@
 package net.buycraft.plugin.bukkit;
 
-import lombok.RequiredArgsConstructor;
-import net.buycraft.plugin.data.QueuedPlayer;
-import net.buycraft.plugin.execution.PlayerCommandExecutor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import lombok.RequiredArgsConstructor;
+import net.buycraft.plugin.data.QueuedPlayer;
+import net.buycraft.plugin.execution.PlayerCommandExecutor;
 
 @RequiredArgsConstructor
 public class BuycraftListener implements Listener {
@@ -32,11 +33,23 @@ public class BuycraftListener implements Listener {
         if (!plugin.getConfiguration().isDisableBuyCommand()) {
             for (String s : plugin.getConfiguration().getBuyCommandName()) {
                 if (StringUtils.equalsIgnoreCase(event.getMessage().substring(1), s) ||
-                        StringUtils.startsWithIgnoreCase(event.getMessage().substring(1), s + " ")) {
+                        this.startsWithIC(event.getMessage().substring(1), s + " ")) {
                     plugin.getViewCategoriesGUI().open(event.getPlayer());
                     event.setCancelled(true);
                 }
             }
         }
     }
+   
+    private static boolean startsWithIC(String str, String prefix) {
+        if (str == null || prefix == null) {
+            return (str == null && prefix == null);
+        }
+        if (prefix.length() > str.length()) {
+            return false;
+        }
+
+        return str.toLowerCase().startsWith(prefix.toLowerCase());
+    }
+
 }

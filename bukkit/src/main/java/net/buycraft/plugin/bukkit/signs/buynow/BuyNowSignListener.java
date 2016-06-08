@@ -1,18 +1,16 @@
 package net.buycraft.plugin.bukkit.signs.buynow;
 
-import lombok.Getter;
-import net.buycraft.plugin.bukkit.BuycraftPlugin;
-import net.buycraft.plugin.bukkit.tasks.BuyNowSignUpdater;
-import net.buycraft.plugin.bukkit.tasks.SendCheckoutLink;
-import net.buycraft.plugin.bukkit.tasks.SignUpdateApplication;
-import net.buycraft.plugin.bukkit.util.SerializedBlockLocation;
-import net.buycraft.plugin.data.Package;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +20,13 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.*;
+import lombok.Getter;
+import net.buycraft.plugin.bukkit.BuycraftPlugin;
+import net.buycraft.plugin.bukkit.tasks.BuyNowSignUpdater;
+import net.buycraft.plugin.bukkit.tasks.SendCheckoutLink;
+import net.buycraft.plugin.bukkit.tasks.SignUpdateApplication;
+import net.buycraft.plugin.bukkit.util.SerializedBlockLocation;
+import net.buycraft.plugin.data.Package;
 
 public class BuyNowSignListener implements Listener {
     @Getter
@@ -103,7 +107,8 @@ public class BuyNowSignListener implements Listener {
                     if ((event.getPlayer().getOpenInventory().getTopInventory() == null ||
                             !event.getPlayer().getOpenInventory().getTopInventory().getTitle().startsWith("Buycraft: ")) &&
                             settingUpSigns.remove(event.getPlayer().getUniqueId()) != null) {
-                        event.getPlayer().sendMessage(ChatColor.RED + "Buy sign set up cancelled.");
+                    	if (event.getPlayer() instanceof CommandSender)
+                        ((CommandSender) event.getPlayer()).sendMessage(ChatColor.RED + "Buy sign set up cancelled.");
                     }
                 }
             }, 3);
